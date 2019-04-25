@@ -1,0 +1,271 @@
+class TreeNode {
+  public:
+    TreeNode();
+    TreeNode(int key);
+    virtual ~TreeNode();//why?
+
+    int key;
+    TreeNode *left;
+    TreeNode *right;
+};
+
+
+
+TreeNode::TreeNode()
+{
+  left = NULL;
+  right = NULL;
+}
+TreeNode::TreeNode(int k)
+{
+  left = NULL;
+  right = NULL;
+  key = k;
+}
+TreeNode::~TreeNode()
+{
+  //adadada
+}
+
+
+class BST{
+  public:
+    BST();
+    virtual ~BST();
+
+    void insert(int value);
+    bool contains(int value);//aka search
+    bool deleteNode(int value);
+    TreeNode* getSuccessor(TreeNode* d);
+    bool deleteRec();
+
+    TreeNode* getMin();
+    TreeNode* getMax();
+    bool isEmpty();
+
+  private:
+    TreeNode *root;
+};
+
+
+
+//implement///
+BST::BST()
+{
+  root = NULL;//empty tree
+}
+BST::~BST()
+{
+  //iterate and delete
+  //other stuff
+}
+void printTree()
+{
+  recPrint(root);
+}
+void recPrint(TreeNode *node) //recursive print
+{
+  if(node == NULL)
+  {
+    return;
+  }
+
+  recPrint(node->left);
+  cout << node->key << endl;
+  recPrint(node->right);
+}
+
+void BST::insert(int value)
+{
+  //check if value exists, if no then continue
+  TreeNode *node = new TreeNode(value); //key is not set to value
+
+  if(isEmpty())
+  {
+    root = node;
+  }
+  else//not an empty tree . need to find insertion point
+  {
+    TreeNode *current = root;
+    TreeNode *parent;
+
+    while(true)// iterate throught the tree
+    {
+      parent = current;
+
+      if(value < current->key)
+      {
+        current = current->left;//go left
+
+        if(current == NULL) //we found the spot
+        {
+          parent->left = node;
+          break;
+        }
+      }
+      else//go right
+      {
+        current = current->right;
+        if(current == NULL)
+        {
+          parent->right = node;
+          break;
+        }
+      }
+
+    }
+  }
+}
+
+bool BST::contains(int value)
+{
+  if(isEmpty())
+  {
+    return false;
+  }
+  else// not an empty tree
+  {
+    TreeNode *current = root;
+
+    while(current->key != value)
+    {
+      if(value < current->key)//go left
+      {
+        current = current->left;
+      }
+      else
+      {
+        current = curent->right;
+      }
+      if(current == NULL)
+        return false;
+
+    }
+  }
+  return true;
+}
+
+
+bool BTS::deleteR(int k)
+{
+  if(isEmpty())
+  {
+    return false;
+  }
+  //check is key/value exists before cpntinuing to remove
+  if(contains(k))
+  {
+    TreeNode *current = root;
+    TreeNode *parent = root;
+    bool isLeft = true;
+
+    while(current->key != k)
+    {
+      parent = current;
+
+      if(k < current->key)
+      {
+        isLeft = true;
+        current = current->left;
+      }
+
+      if(current == NULL)
+      {
+        return false;
+      }
+    }
+    //at This point we have found out node
+
+    if(current ->left == NULL && current->right == NULL) //no childrent, leaf node
+    {
+      if( current == root)
+      {
+        root = NULL;
+      }
+      else if(isLeft)
+      {
+        parent->left = NULL;
+      }
+      else //right child
+      {
+        parent->right = NULL;
+      }
+    }
+    else if(current->right == NULL) // no right child
+    {
+      if(current == root)
+      {
+        root = current ->left;
+      }
+      else if(isLeft)
+      {
+        parent->left = current->left;
+      }
+      else
+      {
+        parent->right = current->left;
+      }
+    }
+    else if(current->left == NULL) //no left children
+    {
+      if(current == root)
+      {
+        root = NULL;
+      }
+      else if(isLeft)
+      {
+        parent->left = current->right;
+      }
+      else
+      {
+        parent->right = current->right;
+      }
+    }
+    else//node has two children
+    {
+      //find the successor of the node to be deleted(current)
+      TreeNode *successor = getSuccessor(current);
+
+      if(current == root)
+      {
+        root = successor;
+      }
+      else if(isLeft)
+      {
+        parent->left = successor;
+      }
+      else
+      {
+        parent->right = successor;
+      }
+
+      successor-.left = current-left;
+    }
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+
+
+TreeNode* BST::gestSuccessor(TreeNode *d)//d is the node to be deleted
+{
+  TreeNode *sp = d; //successors parent
+  TreeNode *successor = d;
+  TreeNode *current = d->right;
+
+  while(current != NULL)//
+  {
+    sp = successor;
+    sucessor = current;
+    current = current->left;
+  }
+  if(sucessor != d->right)
+  {
+    sp->left = successor->right;
+    successor =
+  }
+}
